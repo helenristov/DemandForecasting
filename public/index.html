@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meridian Foods Forecast Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="hero">
+      <div>
+        <div class="eyebrow">Demand forecasting studio</div>
+        <h1>Meridian Foods Forecast Studio</h1>
+        <p class="hero-copy">Python-based statistical forecasting with a simple static dashboard. Sample data stays local, forecasts are prebuilt into JSON, and the front end remains lightweight and easy to host.</p>
+      </div>
+      <div class="hero-meta">
+        <div class="meta-card">
+          <span class="meta-label">Engine</span>
+          <strong>pandas · statsmodels</strong>
+        </div>
+        <div class="meta-card">
+          <span class="meta-label">Models</span>
+          <strong>EMA · Holt-Winters · AR(3)</strong>
+        </div>
+        <div class="meta-card">
+          <span class="meta-label">Delivery</span>
+          <strong>Static HTML dashboard</strong>
+        </div>
+      </div>
+    </header>
+
+    <section class="toolbar card">
+      <div class="control-grid">
+        <label>
+          <span>Store</span>
+          <select id="store-select"></select>
+        </label>
+        <label>
+          <span>Category</span>
+          <select id="category-select"></select>
+        </label>
+        <label>
+          <span>Forecast horizon</span>
+          <select id="horizon-select">
+            <option value="6">6 months</option>
+            <option value="12" selected>12 months</option>
+            <option value="18">18 months</option>
+          </select>
+        </label>
+        <label>
+          <span>Primary view</span>
+          <select id="view-select">
+            <option value="ensemble" selected>Ensemble forecast</option>
+            <option value="ema">EMA regression</option>
+            <option value="holt">Holt-Winters</option>
+            <option value="ar3">AR(3)</option>
+          </select>
+        </label>
+      </div>
+      <div class="toolbar-note" id="toolbar-note">Loading forecast payload…</div>
+    </section>
+
+    <section class="kpi-grid" id="kpi-grid"></section>
+
+    <section class="layout-grid">
+      <article class="card chart-card chart-card-wide">
+        <div class="section-head">
+          <div>
+            <h2>Demand history and forecast</h2>
+            <p>Actual, outlier-adjusted history, EMA smoothing, and forward forecast with confidence bands.</p>
+          </div>
+          <div class="pill" id="series-badge">Series</div>
+        </div>
+        <div class="chart-wrap"><canvas id="history-chart"></canvas></div>
+      </article>
+
+      <article class="card chart-card">
+        <div class="section-head">
+          <div>
+            <h2>Model comparison</h2>
+            <p>Compare the next horizon across the three component models and the ensemble.</p>
+          </div>
+        </div>
+        <div class="chart-wrap compact"><canvas id="model-chart"></canvas></div>
+      </article>
+
+      <article class="card">
+        <div class="section-head">
+          <div>
+            <h2>Weighting and fit</h2>
+            <p>Static ensemble weights plus holdout RMSE from the Python modeling step.</p>
+          </div>
+        </div>
+        <div id="weights"></div>
+        <div id="metrics" class="metric-list"></div>
+      </article>
+
+      <article class="card">
+        <div class="section-head">
+          <div>
+            <h2>Detected outliers</h2>
+            <p>Rolling z-score anomalies replaced with the local rolling median before modeling.</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Raw</th>
+                <th>Adjusted</th>
+                <th>Z-score</th>
+              </tr>
+            </thead>
+            <tbody id="outlier-body"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
