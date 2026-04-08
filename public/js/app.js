@@ -26,7 +26,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 async function loadPayload() {
-  const resp = await fetch("data/forecast_data.json");
+  const resp = await fetch("./data/forecast_data.json");
   STATE.data = await resp.json();
   const meta = STATE.data.meta;
   STATE.store = meta.default_store;
